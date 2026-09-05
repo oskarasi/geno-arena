@@ -1,0 +1,1 @@
+Language: JavaScript. Emit solution.mjs and solution.test.mjs.

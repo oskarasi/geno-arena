@@ -191,12 +191,35 @@ def main() -> int:
     )
     args = parser.parse_args()
 
-    SOLUTIONS = Path(args.solutions_root).resolve()
+    solutions_root = Path(args.solutions_root)
+    if not solutions_root.is_absolute():
+        solutions_root = (ROOT / solutions_root).resolve()
+    else:
+        solutions_root = solutions_root.resolve()
+    SOLUTIONS = solutions_root
     batch_id = args.batch_id
     agent_note = args.agent_note
     model_family = args.model_family or agent_note
 
     RESULTS.mkdir(parents=True, exist_ok=True)
+
+    # Merge metadata written by blind_batch.py when present.
+    prior_meta = {}
+    meta_path = RESULTS / f"{batch_id}-meta.json"
+    if meta_path.exists():
+        try:
+            prior_payload = json.loads(meta_path.read_text(encoding="utf-8"))
+            prior_meta = prior_payload.get("meta") or prior_payload
+        except json.JSONDecodeError:
+            prior_meta = {}
+
+    if prior_meta.get("note") == "blind" and args.agent_note.startswith("manual agent"):
+        agent_note = "blind"
+    if prior_meta.get("model") and args.model_family is None:
+        model_family = prior_meta["model"]
+    if prior_meta.get("agent_note") and args.agent_note.startswith("manual agent"):
+        agent_note = prior_meta["agent_note"]
+
     tasks = list_tasks()
     results: list[LaneResult] = []
     for task_id in tasks:
@@ -214,6 +237,10 @@ def main() -> int:
         "model_family": model_family,
         "solutions_root": str(SOLUTIONS),
     }
+    if prior_meta.get("model"):
+        meta["model"] = prior_meta["model"]
+    if prior_meta.get("note"):
+        meta["note"] = prior_meta["note"]
     payload = {
         "meta": meta,
         "scoreboard": board,

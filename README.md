@@ -15,7 +15,7 @@ Adversarial LLM **coding arena**: the same language-agnostic task prompts implem
 
 **Does not prove:**
 
-- Multi-model or multi-vendor LLM comparison — **no external LLM API is called yet**.
+- Multi-model or multi-vendor LLM comparison — batch-001 is still manual; Groq blind batch is optional via `harness/blind_batch.py`.
 - Batch-001 solutions are **manual agent solutions by Programmer / Cursor agent, single-pass** (same model family / workflow), not blind independent model runs.
 - Latency, token cost, or naturalness rankings — only build/test pass-fail and wall seconds.
 
@@ -38,17 +38,45 @@ tasks JSON files, solutions for geno python and javascript, harness score script
 
 ## How to run
 
-From the repo root, run the Python scorer in harness/score.py or the thin shell wrapper harness/run_task.sh.
+From the repo root:
+
+```bash
+python3 harness/score.py
+# or
+harness/run_task.sh
+```
+
+Score an alternate solutions tree (e.g. blind batch):
+
+```bash
+python3 harness/score.py --solutions-root solutions-blind --batch-id batch-002
+```
 
 Requirements: Python 3, Node.js 18+, Geno 0.4.x on PATH or the geno-venv binary.
+Blind generation additionally needs `GROQ_API_KEY` (stdlib HTTP only; no extra pip packages).
 
 ## How to add a task
 
 Add a task JSON under tasks/, implement matching folders under solutions for each language, then re-run the scorer.
 
-## Plugging in an external LLM later
+## Blind batch via Groq (batch-002)
 
-Keep scoring unchanged; only generation is new. Provide a generate(prompt, language) helper that returns filename-to-contents for one language, write those files into the solutions tree, then run the scorer. Log model metadata into the batch JSON.
+Generation uses the OpenAI-compatible Groq Chat Completions API (`harness/generate.py`).
+Default model: `llama-3.3-70b-versatile`. Solutions are written under `solutions-blind/`
+(never overwrites `solutions/`).
+
+```bash
+export GROQ_API_KEY=...
+python3 harness/blind_batch.py
+python3 harness/score.py --solutions-root solutions-blind --batch-id batch-002
+```
+
+If `GROQ_API_KEY` is missing, `blind_batch.py` exits without calling the API.
+Optional flags: `--model`, `--languages`, `--tasks`, `--dry-run`.
+Connectivity check: `python3 harness/generate.py --dry-call`.
+
+`blind_batch.py` writes `results/batch-002-meta.json` (model, timestamp, note `"blind"`).
+The scorer merges that meta when present.
 
 ## Tasks (batch-001)
 
