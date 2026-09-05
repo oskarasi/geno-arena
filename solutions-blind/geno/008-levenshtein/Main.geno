@@ -1,0 +1,90 @@
+/// Classic Levenshtein edit distance via DP.
+
+import String
+
+func min3(a: Int, b: Int, c: Int) -> Int
+    example 1, 2, 3 -> 1
+    example 5, 2, 4 -> 2
+    example 9, 8, 1 -> 1
+    example 0, 0, 0 -> 0
+    var m: Int = a
+    if b < m then
+        m = b
+    end if
+    if c < m then
+        m = c
+    end if
+    return m
+end func
+
+func iota0(n: Int) -> List[Int]
+    requires n >= 0
+    example 0 -> [0]
+    example 3 -> [0, 1, 2, 3]
+    var xs: List[Int] = []
+    var j: Int = 0
+    while j <= n do
+        xs = append(xs, j)
+        j = j + 1
+    end while
+    return xs
+end func
+
+func filled(count: Int, value: Int) -> List[Int]
+    requires count >= 0
+    example 0, 9 -> []
+    example 3, 7 -> [7, 7, 7]
+    var xs: List[Int] = []
+    var i: Int = 0
+    while i < count do
+        xs = append(xs, value)
+        i = i + 1
+    end while
+    return xs
+end func
+
+func levenshtein(a: String, b: String) -> Int
+    ensures result >= 0
+    example "", "" -> 0
+    example "a", "" -> 1
+    example "", "abc" -> 3
+    example "kitten", "sitting" -> 3
+    example "cat", "cat" -> 0
+    example "cat", "cats" -> 1
+    example "book", "back" -> 2
+    example "abc", "ac" -> 1
+    let m: Int = length(a)
+    let n: Int = length(b)
+    if m == 0 then
+        return n
+    end if
+    if n == 0 then
+        return m
+    end if
+    var prev: List[Int] = iota0(n)
+    var i: Int = 1
+    while i <= m do
+        var cur: List[Int] = filled(count: n + 1, value: 0)
+        cur = set_at(list: cur, index: 0, value: i)
+        var jj: Int = 1
+        while jj <= n do
+            var cost: Int = 1
+            if char_at(a, i - 1) == char_at(b, jj - 1) then
+                cost = 0
+            end if
+            let ins: Int = cur[jj - 1] + 1
+            let delete: Int = prev[jj] + 1
+            let sub: Int = prev[jj - 1] + cost
+            cur = set_at(list: cur, index: jj, value: min3(a: ins, b: delete, c: sub))
+            jj = jj + 1
+        end while
+        prev = cur
+        i = i + 1
+    end while
+    return prev[n]
+end func
+
+@untested("entry point")
+func main() -> String
+    return "kitten/sitting=" + to_string(levenshtein("kitten", "sitting"))
+end func

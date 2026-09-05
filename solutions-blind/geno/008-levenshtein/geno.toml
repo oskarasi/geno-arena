@@ -1,0 +1,5 @@
+name = "arena-008-levenshtein"
+version = "0.1.0"
+entrypoint = "Main"
+targets = ["python-cli"]
+files = ["Main"]

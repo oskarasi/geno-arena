@@ -1,0 +1,37 @@
+/// FizzBuzz for arena task 001.
+
+func fizz_buzz(n: Int) -> String
+    example 1 -> "1"
+    example 3 -> "Fizz"
+    example 5 -> "Buzz"
+    example 15 -> "FizzBuzz"
+    example 7 -> "7"
+    example 30 -> "FizzBuzz"
+    if n % 15 == 0 then
+        return "FizzBuzz"
+    else if n % 3 == 0 then
+        return "Fizz"
+    else if n % 5 == 0 then
+        return "Buzz"
+    else
+        return to_string(n)
+    end if
+end func
+
+func fizz_buzz_range(upto: Int) -> String
+    requires upto >= 1
+    example 15 -> "1 2 Fizz 4 Buzz Fizz 7 8 Fizz Buzz 11 Fizz 13 14 FizzBuzz"
+    example 5 -> "1 2 Fizz 4 Buzz"
+    var parts: List[String] = []
+    var i: Int = 1
+    while i <= upto do
+        parts = append(parts, fizz_buzz(i))
+        i = i + 1
+    end while
+    return join(parts, " ")
+end func
+
+@untested("entry point")
+func main() -> String
+    return fizz_buzz_range(15)
+end func

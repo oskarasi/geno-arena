@@ -1,0 +1,28 @@
+/// Roman numeral demo entrypoint.
+
+import String
+import Lib
+
+func demo_pair(n: Int) -> String
+    example 4 -> "4=IV=4"
+    match to_roman(n) with
+    | Err(e) -> return "to_err:" + e
+    | Ok(roman) ->
+        match from_roman(roman) with
+        | Ok(v) -> return to_string(n) + "=" + roman + "=" + to_string(v)
+        | Err(e) -> return "from_err:" + e
+        end match
+    end match
+end func
+
+@untested("entry point")
+func main() -> String
+    let nums: List[Int] = [1, 4, 9, 40, 44, 1994, 3999]
+    var parts: List[String] = []
+    var i: Int = 0
+    while i < length(nums) do
+        parts = append(parts, demo_pair(nums[i]))
+        i = i + 1
+    end while
+    return join(parts, " ")
+end func

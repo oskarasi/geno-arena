@@ -164,6 +164,38 @@ def render_md(batch_id: str, results: list[LaneResult], board: dict, meta: dict)
 
 
 def main() -> int:
+    import argparse
+
+    global SOLUTIONS
+
+    parser = argparse.ArgumentParser(description="Score geno-arena solutions")
+    parser.add_argument(
+        "--solutions-root",
+        default=str(ROOT / "solutions"),
+        help="Root directory containing geno/python/javascript solution trees",
+    )
+    parser.add_argument(
+        "--batch-id",
+        default="batch-001",
+        help="Batch id used for results/<batch-id>.{json,md}",
+    )
+    parser.add_argument(
+        "--agent-note",
+        default="manual agent solutions by Programmer / Cursor agent, single-pass",
+        help="Note recorded in batch meta",
+    )
+    parser.add_argument(
+        "--model-family",
+        default=None,
+        help="Model family string for meta (defaults to agent-note)",
+    )
+    args = parser.parse_args()
+
+    SOLUTIONS = Path(args.solutions_root).resolve()
+    batch_id = args.batch_id
+    agent_note = args.agent_note
+    model_family = args.model_family or agent_note
+
     RESULTS.mkdir(parents=True, exist_ok=True)
     tasks = list_tasks()
     results: list[LaneResult] = []
@@ -173,23 +205,24 @@ def main() -> int:
 
     board = scoreboard(results)
     meta = {
-        "batch_id": "batch-001",
+        "batch_id": batch_id,
         "generated_at": datetime.now(timezone.utc).isoformat(),
-        "agent_note": "manual agent solutions by Programmer / Cursor agent, single-pass",
+        "agent_note": agent_note,
         "geno_bin": str(GENO_BIN if GENO_BIN.exists() else "geno"),
         "geno_version_hint": "0.4.3",
         "js_lane_note": "javascript (.mjs + node:test); TypeScript toolchain unavailable in box (npx tsc path error)",
-        "model_family": "manual agent solutions by Programmer / Cursor agent, single-pass",
+        "model_family": model_family,
+        "solutions_root": str(SOLUTIONS),
     }
     payload = {
         "meta": meta,
         "scoreboard": board,
         "results": [asdict(r) for r in results],
     }
-    json_path = RESULTS / "batch-001.json"
-    md_path = RESULTS / "batch-001.md"
+    json_path = RESULTS / f"{batch_id}.json"
+    md_path = RESULTS / f"{batch_id}.md"
     json_path.write_text(json.dumps(payload, indent=2) + "\n")
-    md_path.write_text(render_md("batch-001", results, board, meta))
+    md_path.write_text(render_md(batch_id, results, board, meta))
     print(f"Wrote {json_path}")
     print(f"Wrote {md_path}")
     for lang, b in board.items():

@@ -1,0 +1,88 @@
+/// Caesar cipher with wrap within a-z / A-Z; non-letters preserved.
+
+import String
+
+func normalize_mod(n: Int) -> Int
+    example 27 -> 1
+    example -1 -> 25
+    example 0 -> 0
+    example 25 -> 25
+    example 52 -> 0
+    example -27 -> 25
+    let m: Int = n % 26
+    if m < 0 then
+        return m + 26
+    else
+        return m
+    end if
+end func
+
+func shift_char(ch: String, shift: Int) -> String
+    example "a", 3 -> "d"
+    example "z", 1 -> "a"
+    example "A", 3 -> "D"
+    example "X", 5 -> "C"
+    example "!", 3 -> "!"
+    example " ", 1 -> " "
+    example "m", 0 -> "m"
+    example "Z", 1 -> "A"
+
+    let lower: String = "abcdefghijklmnopqrstuvwxyz"
+    let upper: String = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+
+    let lo: Int = String.index_of(lower, ch)
+    if lo >= 0 then
+        let safe: Int = normalize_mod(lo + shift)
+        return String.char_at(lower, safe)
+    end if
+
+    let up: Int = String.index_of(upper, ch)
+    if up >= 0 then
+        let safe2: Int = normalize_mod(up + shift)
+        return String.char_at(upper, safe2)
+    end if
+
+    return ch
+end func
+
+func encrypt(text: String, shift: Int) -> String
+    example "Hello, World!", 3 -> "Khoor, Zruog!"
+    example "abc", 1 -> "bcd"
+    example "XYZ", 3 -> "ABC"
+    example "", 5 -> ""
+    example "abc", 0 -> "abc"
+    example "abc", 26 -> "abc"
+    example "abc", -1 -> "zab"
+
+    var result: String = ""
+    var i: Int = 0
+    while i < length(text) do
+        result = result + shift_char(String.char_at(text, i), shift)
+        i = i + 1
+    end while
+    return result
+end func
+
+func decrypt(text: String, shift: Int) -> String
+    example "Khoor, Zruog!", 3 -> "Hello, World!"
+    example "bcd", 1 -> "abc"
+    example "ABC", 3 -> "XYZ"
+    example "", 5 -> ""
+    return encrypt(text, 0 - shift)
+end func
+
+func roundtrip_ok(text: String, shift: Int) -> Bool
+    requires shift >= 0
+    example "Hello", 3 -> true
+    example "", 0 -> true
+    example "Zzz!", 25 -> true
+    return decrypt(encrypt(text, shift), shift) == text
+end func
+
+@untested("entry point")
+func main() -> String
+    let plain: String = "Hello, World!"
+    let cipher: String = encrypt(plain, 3)
+    let back: String = decrypt(cipher, 3)
+    return "cipher=" + cipher + " back=" + back
+end func

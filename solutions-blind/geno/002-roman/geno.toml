@@ -1,0 +1,5 @@
+name = "arena-002-roman"
+version = "0.1.0"
+entrypoint = "Main"
+targets = ["python-cli"]
+files = ["Lib", "Main"]

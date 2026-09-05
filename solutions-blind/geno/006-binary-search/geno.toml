@@ -1,0 +1,5 @@
+name = "arena-006-binary-search"
+version = "0.1.0"
+entrypoint = "Main"
+targets = ["python-cli"]
+files = ["Main"]
