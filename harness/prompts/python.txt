@@ -1,1 +1,1 @@
-Language: Python 3. Emit solution.py and solution_test.py.
+Language: Python 3. Emit solution.py and solution_test.py. Tests: plain asserts + print ok; import from solution. No third-party deps.
