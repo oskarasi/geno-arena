@@ -1,0 +1,12 @@
+{
+  "id": "005-rle",
+  "title": "Run-Length Encoding",
+  "prompt": "Implement run-length encode/decode for strings. Encoding: each run is <char><count> where count is one or more decimal digits (e.g. \"aaabbc\" -> \"a3b2c1\", \"a\" -> \"a1\"). Empty string encodes to empty. decode returns an error for malformed input (missing count, count < 1, empty count). Round-trip: decode(encode(s)) == s for alphanumeric inputs.",
+  "acceptance": [
+    "encode(\"\") == \"\"; encode(\"a\") == \"a1\"; encode(\"aaabbc\") == \"a3b2c1\"",
+    "encode(\"WWWWWWWWWWWWBWWWWWWWWWWWWBBB\") == \"W12B1W12B3\"",
+    "decode(\"a3b2c1\") == \"aaabbc\"; decode(\"W12B1W12B3\") succeeds",
+    "decode(\"a\") fails (missing count); decode(\"a0\") fails (count < 1)",
+    "round-trip holds for \"aaabbc\", \"Hello\", \"\""
+  ]
+}

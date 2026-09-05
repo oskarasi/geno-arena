@@ -1,0 +1,172 @@
+/// Run-length encoding for simple alphanumeric strings.
+///
+/// Encoding scheme: each run is `<char><count>` where `char` is a single
+/// alphanumeric character and `count` is one or more decimal digits.
+/// Example: "aaabbc" -> "a3b2c1"
+///
+/// Empty string encodes to empty string. Decode validates the format.
+
+import String
+
+func is_alnum(c: String) -> Bool
+    example "a" -> true
+    example "Z" -> true
+    example "5" -> true
+    example "!" -> false
+    example " " -> false
+    return (c >= "a" and c <= "z") or (c >= "A" and c <= "Z") or (c >= "0" and c <= "9")
+end func
+
+func is_digit(c: String) -> Bool
+    example "0" -> true
+    example "9" -> true
+    example "a" -> false
+    return c >= "0" and c <= "9"
+end func
+
+func repeat_char(c: String, n: Int) -> String
+    requires n >= 0
+    example "a", 3 -> "aaa"
+    example "x", 0 -> ""
+    example "b", 1 -> "b"
+    return repeat(c, n)
+end func
+
+func encode(s: String) -> String
+    example "" -> ""
+    example "a" -> "a1"
+    example "aaabbc" -> "a3b2c1"
+    example "WWWWWWWWWWWWBWWWWWWWWWWWWBBB" -> "W12B1W12B3"
+    example "abc" -> "a1b1c1"
+    example "======= " -> "=7 1"
+    if length(s) == 0 then
+        return ""
+    end if
+    var result: String = ""
+    var i: Int = 0
+    while i < length(s) do
+        let ch: String = char_at(s, i)
+        var count: Int = 1
+        var j: Int = i + 1
+        while j < length(s) and char_at(s, j) == ch do
+            count = count + 1
+            j = j + 1
+        end while
+        result = result + ch + to_string(count)
+        i = j
+    end while
+    return result
+end func
+
+func decode(s: String) -> Result[String, String]
+    example "" -> Ok("")
+    example "a3b2c1" -> Ok("aaabbc")
+    example "a1" -> Ok("a")
+    example "W12B1W12B3" -> Ok("WWWWWWWWWWWWBWWWWWWWWWWWWBBB")
+    example "a" -> Err("missing count after character")
+    example "3a" -> Err("missing count after character")
+    example "!2" -> Err("expected alphanumeric character")
+    example "a0" -> Err("count must be at least 1")
+    if length(s) == 0 then
+        return Ok("")
+    end if
+    var result: String = ""
+    var i: Int = 0
+    while i < length(s) do
+        let ch: String = char_at(s, i)
+        if not is_alnum(ch) then
+            return Err("expected alphanumeric character")
+        end if
+        i = i + 1
+        if i >= length(s) or not is_digit(char_at(s, i)) then
+            return Err("missing count after character")
+        end if
+        var count_str: String = ""
+        while i < length(s) and is_digit(char_at(s, i)) do
+            count_str = count_str + char_at(s, i)
+            i = i + 1
+        end while
+        match parse_int(count_str) with
+            | None -> return Err("invalid count")
+            | Some(n) ->
+                if n < 1 then
+                    return Err("count must be at least 1")
+                end if
+                result = result + repeat_char(ch, n)
+        end match
+    end while
+    return Ok(result)
+end func
+
+func round_trip(s: String) -> String
+    example "aaabbc" -> "aaabbc"
+    example "" -> ""
+    example "Hello" -> "Hello"
+    match decode(encode(s)) with
+        | Ok(decoded) -> return decoded
+        | Err(msg) -> return "error: " + msg
+    end match
+end func
+
+func describe(s: String) -> String
+    example "aaabbc" -> "encode=a3b2c1 roundtrip=ok"
+    example "" -> "encode= roundtrip=ok"
+    let encoded: String = encode(s)
+    match decode(encoded) with
+        | Ok(decoded) ->
+            if decoded == s then
+                return "encode=" + encoded + " roundtrip=ok"
+            else
+                return "encode=" + encoded + " roundtrip=mismatch"
+            end if
+        | Err(msg) -> return "encode=" + encoded + " error=" + msg
+    end match
+end func
+
+/// Argv-style: `encode <text>` or `decode <encoded>`.
+func run(args: List[String]) -> Result[String, String]
+    example ["encode", "aaabbc"] -> Ok("a3b2c1")
+    example ["decode", "a3b2c1"] -> Ok("aaabbc")
+    example ["decode", "a"] -> Err("missing count after character")
+    example [] -> Err("usage: encode|decode <text>")
+    example ["encode"] -> Err("usage: encode|decode <text>")
+    example ["bogus", "aa"] -> Err("usage: encode|decode <text>")
+
+    if length(args) < 2 then
+        return Err("usage: encode|decode <text>")
+    end if
+
+    let cmd: String = args[0]
+    let text: String = args[1]
+
+    if cmd == "encode" or cmd == "enc" then
+        return Ok(encode(text))
+    end if
+    if cmd == "decode" or cmd == "dec" then
+        return decode(text)
+    end if
+    return Err("usage: encode|decode <text>")
+end func
+
+@untested("entry point")
+func main() -> String
+    return join([
+        describe("aaabbc"),
+        describe("WWWWWWWWWWWWBWWWWWWWWWWWWBBB"),
+        describe("abc"),
+        describe("")
+    ], " | ")
+end func
+
+@untested("requires --unsafe --cap env,print")
+func cli_main() -> Int
+    let args: List[String] = cli_args()
+    match run(args) with
+    | Ok(out) ->
+        print(out)
+        return 0
+    | Err(e) ->
+        print(e)
+        return 1
+    end match
+end func

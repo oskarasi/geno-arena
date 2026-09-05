@@ -1,0 +1,12 @@
+{
+  "id": "007-caesar",
+  "title": "Caesar Cipher",
+  "prompt": "Implement Caesar cipher encrypt(text, shift) and decrypt(text, shift). Shift letters by N positions wrapping within a-z and A-Z separately; preserve case; leave non-letters unchanged. Shifts may be negative or larger than 26 (normalize mod 26). decrypt(text, shift) equals encrypt(text, -shift).",
+  "acceptance": [
+    "encrypt(\"Hello, World!\", 3) == \"Khoor, Zruog!\"",
+    "encrypt(\"abc\", 1) == \"bcd\"; encrypt(\"XYZ\", 3) == \"ABC\"",
+    "encrypt(\"abc\", -1) == \"zab\"; encrypt(\"abc\", 26) == \"abc\"",
+    "decrypt(\"Khoor, Zruog!\", 3) == \"Hello, World!\"",
+    "round-trip: decrypt(encrypt(s, k), k) == s for sample strings"
+  ]
+}

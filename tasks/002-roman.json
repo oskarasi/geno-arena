@@ -1,0 +1,13 @@
+{
+  "id": "002-roman",
+  "title": "Roman Numerals",
+  "prompt": "Implement bidirectional Roman numeral conversion for integers in 1..3999. to_roman(n) returns the standard Roman form (subtractive notation: IV, IX, XL, XC, CD, CM). from_roman(s) parses a Roman string case-insensitively and returns the integer. Out-of-range or invalid inputs must be reported as errors (language-appropriate error type or null/None with a clear failure path).",
+  "acceptance": [
+    "to_roman(1) == \"I\"; to_roman(4) == \"IV\"; to_roman(9) == \"IX\"",
+    "to_roman(40) == \"XL\"; to_roman(44) == \"XLIV\"; to_roman(1994) == \"MCMXCIV\"",
+    "to_roman(3999) == \"MMMCMXCIX\"",
+    "from_roman(\"MCMXCIV\") == 1994; from_roman(\"lviii\") == 58",
+    "to_roman(0) and to_roman(4000) fail; from_roman(\"\") and from_roman(\"ABC\") fail",
+    "round-trip: from_roman(to_roman(n)) == n for sample values"
+  ]
+}

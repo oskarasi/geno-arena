@@ -1,0 +1,13 @@
+{
+  "id": "003-luhn",
+  "title": "Luhn Checksum",
+  "prompt": "Implement the Luhn algorithm to validate digit strings. Normalize input by stripping spaces and hyphens before validation. luhn_valid(digits) returns true iff the (normalized) string is non-empty, consists only of digits, and passes the Luhn checksum. Doubling proceeds from the rightmost digit leftward (every second digit doubled; if doubled value > 9, subtract 9).",
+  "acceptance": [
+    "luhn_valid(\"79927398713\") == true",
+    "luhn_valid(\"79927398714\") == false",
+    "luhn_valid(\"4532015112830366\") == true",
+    "luhn_valid(\"7992-7398-713\") == true (after normalize)",
+    "luhn_valid(\"\") == false; luhn_valid(\"12a\") == false",
+    "luhn_valid(\"0\") == true"
+  ]
+}

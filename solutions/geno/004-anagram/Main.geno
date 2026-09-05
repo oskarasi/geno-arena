@@ -1,0 +1,40 @@
+/// Anagram checker: normalize letters and compare sorted character signatures.
+
+func normalize(text: String) -> String
+    example " Listen " -> "listen"
+    example "A gentleman" -> "agentleman"
+    example "Elegant man" -> "elegantman"
+    return replace(text: to_lower(trim(text)), old: " ", new: "")
+end func
+
+func sorted_chars(text: String) -> String
+    example "listen" -> "eilnst"
+    example "silent" -> "eilnst"
+    example "abc" -> "abc"
+    example "" -> ""
+    return join(sort_strings(to_chars(text)), "")
+end func
+
+func letter_signature(text: String) -> String
+    example "Listen" -> "eilnst"
+    example "Silent" -> "eilnst"
+    example "Hello World" -> "dehllloorw"
+    return sorted_chars(normalize(text))
+end func
+
+func is_anagram(a: String, b: String) -> Bool
+    example "listen", "silent" -> true
+    example "hello", "world" -> false
+    example "Listen", "Silent" -> true
+    example "A gentleman", "Elegant man" -> true
+    example "rail safety", "fairy tales" -> true
+    example "abc", "ab" -> false
+    return letter_signature(a) == letter_signature(b)
+end func
+
+@untested("entry point")
+func main() -> String
+    let a: Bool = is_anagram("listen", "silent")
+    let b: Bool = is_anagram("hello", "world")
+    return "listen/silent=" + to_string(a) + " hello/world=" + to_string(b)
+end func

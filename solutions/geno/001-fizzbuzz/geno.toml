@@ -1,0 +1,5 @@
+name = "arena-001-fizzbuzz"
+version = "0.1.0"
+entrypoint = "Main"
+targets = ["python-cli"]
+files = ["Main"]

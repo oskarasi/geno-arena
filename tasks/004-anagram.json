@@ -1,0 +1,13 @@
+{
+  "id": "004-anagram",
+  "title": "Anagram Checker",
+  "prompt": "Implement is_anagram(a, b) that returns true when two strings are anagrams of each other ignoring case and spaces. Normalize by lowercasing and removing spaces, then compare sorted character multisets (letter signatures).",
+  "acceptance": [
+    "is_anagram(\"listen\", \"silent\") == true",
+    "is_anagram(\"Listen\", \"Silent\") == true",
+    "is_anagram(\"A gentleman\", \"Elegant man\") == true",
+    "is_anagram(\"rail safety\", \"fairy tales\") == true",
+    "is_anagram(\"hello\", \"world\") == false",
+    "is_anagram(\"abc\", \"ab\") == false"
+  ]
+}

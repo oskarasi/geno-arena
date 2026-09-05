@@ -1,0 +1,144 @@
+/// Validate a digit string with the Luhn algorithm.
+
+import String
+
+func digit_at(s: String, i: Int) -> Int
+    requires i >= 0 and i < length(s)
+    example "79927398713", 0 -> 7
+    example "79927398713", 10 -> 3
+    match parse_int(String.char_at(s, i)) with
+    | Some(d) -> return d
+    | None -> return -1
+    end match
+end func
+
+func is_all_digits(s: String) -> Bool
+    example "123" -> true
+    example "12a" -> false
+    example "" -> false
+    example "0" -> true
+    if length(s) == 0 then
+        return false
+    end if
+    var i: Int = 0
+    while i < length(s) do
+        let ch: String = String.char_at(s, i)
+        if ch < "0" or ch > "9" then
+            return false
+        end if
+        i = i + 1
+    end while
+    return true
+end func
+
+/// Strip spaces and hyphens often found in card numbers.
+func normalize_digits(s: String) -> String
+    example "7992-7398-713" -> "79927398713"
+    example "4532 0151 1283 0366" -> "4532015112830366"
+    example "123" -> "123"
+    example "" -> ""
+    var out: String = ""
+    var i: Int = 0
+    while i < length(s) do
+        let ch: String = String.char_at(s, i)
+        if ch != " " and ch != "-" then
+            out = out + ch
+        end if
+        i = i + 1
+    end while
+    return out
+end func
+
+func luhn_valid(digits: String) -> Bool
+    example "79927398713" -> true
+    example "79927398714" -> false
+    example "4532015112830366" -> true
+    example "1234567812345670" -> true
+    example "1234567812345678" -> false
+    example "" -> false
+    example "12a" -> false
+    example "0" -> true
+    if is_all_digits(digits) == false then
+        return false
+    end if
+    var sum: Int = 0
+    var alt: Bool = false
+    var i: Int = length(digits) - 1
+    while i >= 0 do
+        var d: Int = digit_at(digits, i)
+        if alt then
+            d = d * 2
+            if d > 9 then
+                d = d - 9
+            end if
+        end if
+        sum = sum + d
+        alt = alt == false
+        i = i - 1
+    end while
+    return sum % 10 == 0
+end func
+
+func check(raw: String) -> Result[String, String]
+    example "79927398713" -> Ok("valid")
+    example "7992-7398-713" -> Ok("valid")
+    example "79927398714" -> Err("invalid checksum")
+    example "" -> Err("empty input")
+    example "12a" -> Err("digits only (spaces/hyphens stripped)")
+    let digits: String = normalize_digits(raw)
+    if length(digits) == 0 then
+        return Err("empty input")
+    end if
+    if is_all_digits(digits) == false then
+        return Err("digits only (spaces/hyphens stripped)")
+    end if
+    if luhn_valid(digits) then
+        return Ok("valid")
+    else
+        return Err("invalid checksum")
+    end if
+end func
+
+/// Argv-style: `check <digits>` or bare `<digits>`.
+func run(args: List[String]) -> Result[String, String]
+    example ["check", "79927398713"] -> Ok("valid")
+    example ["79927398713"] -> Ok("valid")
+    example ["79927398714"] -> Err("invalid checksum")
+    example [] -> Err("usage: check <digits> | <digits>")
+    example ["check"] -> Err("usage: check <digits> | <digits>")
+    example ["check", "12a"] -> Err("digits only (spaces/hyphens stripped)")
+
+    if length(args) == 0 then
+        return Err("usage: check <digits> | <digits>")
+    end if
+
+    if args[0] == "check" or args[0] == "validate" then
+        if length(args) < 2 then
+            return Err("usage: check <digits> | <digits>")
+        end if
+        return check(args[1])
+    end if
+
+    return check(args[0])
+end func
+
+@untested("entry point")
+func main() -> String
+    let ok: Bool = luhn_valid("79927398713")
+    let bad: Bool = luhn_valid("79927398714")
+    let card: Bool = luhn_valid("4532015112830366")
+    return "79927398713=" + to_string(ok) + " 79927398714=" + to_string(bad) + " card=" + to_string(card)
+end func
+
+@untested("requires --unsafe --cap env,print")
+func cli_main() -> Int
+    let args: List[String] = cli_args()
+    match run(args) with
+    | Ok(out) ->
+        print(out)
+        return 0
+    | Err(e) ->
+        print(e)
+        return 1
+    end match
+end func

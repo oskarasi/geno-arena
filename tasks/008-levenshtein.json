@@ -1,0 +1,13 @@
+{
+  "id": "008-levenshtein",
+  "title": "Levenshtein Distance",
+  "prompt": "Implement levenshtein(a, b) returning the classic edit distance (insert, delete, substitute cost 1) between two strings. Empty vs empty is 0; distance to empty string equals the other length. Prefer an O(|a|*|b|) DP approach.",
+  "acceptance": [
+    "levenshtein(\"\", \"\") == 0",
+    "levenshtein(\"a\", \"\") == 1; levenshtein(\"\", \"abc\") == 3",
+    "levenshtein(\"kitten\", \"sitting\") == 3",
+    "levenshtein(\"cat\", \"cat\") == 0; levenshtein(\"cat\", \"cats\") == 1",
+    "levenshtein(\"book\", \"back\") == 2",
+    "levenshtein(\"abc\", \"ac\") == 1"
+  ]
+}

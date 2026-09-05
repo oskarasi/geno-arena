@@ -1,0 +1,30 @@
+/// Classic FizzBuzz: multiples of 3 -> Fizz, 5 -> Buzz, both -> FizzBuzz.
+
+func fizz_buzz(n: Int) -> String
+    example 1 -> "1"
+    example 3 -> "Fizz"
+    example 5 -> "Buzz"
+    example 15 -> "FizzBuzz"
+    example 7 -> "7"
+    example 30 -> "FizzBuzz"
+    if n % 15 == 0 then
+        return "FizzBuzz"
+    else if n % 3 == 0 then
+        return "Fizz"
+    else if n % 5 == 0 then
+        return "Buzz"
+    else
+        return to_string(n)
+    end if
+end func
+
+@untested("entry point")
+func main() -> String
+    var parts: List[String] = []
+    var i: Int = 1
+    while i <= 15 do
+        parts = append(parts, fizz_buzz(i))
+        i = i + 1
+    end while
+    return join(parts, " ")
+end func

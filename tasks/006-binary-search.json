@@ -1,0 +1,13 @@
+{
+  "id": "006-binary-search",
+  "title": "Binary Search",
+  "prompt": "Implement binary_search(xs, target) over a sorted ascending list of integers. Return the 0-based index of target if present, otherwise -1. Empty list returns -1. Use iterative binary search (no linear scan).",
+  "acceptance": [
+    "binary_search([1,3,5,7,9], 5) == 2",
+    "binary_search([1,3,5,7,9], 1) == 0",
+    "binary_search([1,3,5,7,9], 9) == 4",
+    "binary_search([1,3,5,7,9], 4) == -1",
+    "binary_search([], 1) == -1",
+    "binary_search([2], 2) == 0"
+  ]
+}

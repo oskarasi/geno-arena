@@ -1,0 +1,222 @@
+{
+  "meta": {
+    "batch_id": "batch-001",
+    "generated_at": "2026-09-05T19:33:57.583288+00:00",
+    "agent_note": "manual agent solutions by Programmer / Cursor agent, single-pass",
+    "geno_bin": "/workspace/geno-venv/bin/geno",
+    "geno_version_hint": "0.4.3",
+    "js_lane_note": "javascript (.mjs + node:test); TypeScript toolchain unavailable in box (npx tsc path error)",
+    "model_family": "manual agent solutions by Programmer / Cursor agent, single-pass"
+  },
+  "scoreboard": {
+    "geno": {
+      "total": 8,
+      "build_ok": 8,
+      "tests_ok": 8
+    },
+    "python": {
+      "total": 8,
+      "build_ok": 8,
+      "tests_ok": 8
+    },
+    "javascript": {
+      "total": 8,
+      "build_ok": 8,
+      "tests_ok": 8
+    }
+  },
+  "results": [
+    {
+      "task_id": "001-fizzbuzz",
+      "language": "geno",
+      "build_ok": true,
+      "tests_ok": true,
+      "seconds": 0.6181,
+      "error": null
+    },
+    {
+      "task_id": "001-fizzbuzz",
+      "language": "python",
+      "build_ok": true,
+      "tests_ok": true,
+      "seconds": 0.039,
+      "error": null
+    },
+    {
+      "task_id": "001-fizzbuzz",
+      "language": "javascript",
+      "build_ok": true,
+      "tests_ok": true,
+      "seconds": 0.3192,
+      "error": null
+    },
+    {
+      "task_id": "002-roman",
+      "language": "geno",
+      "build_ok": true,
+      "tests_ok": true,
+      "seconds": 0.7671,
+      "error": null
+    },
+    {
+      "task_id": "002-roman",
+      "language": "python",
+      "build_ok": true,
+      "tests_ok": true,
+      "seconds": 0.0421,
+      "error": null
+    },
+    {
+      "task_id": "002-roman",
+      "language": "javascript",
+      "build_ok": true,
+      "tests_ok": true,
+      "seconds": 0.3208,
+      "error": null
+    },
+    {
+      "task_id": "003-luhn",
+      "language": "geno",
+      "build_ok": true,
+      "tests_ok": true,
+      "seconds": 0.745,
+      "error": null
+    },
+    {
+      "task_id": "003-luhn",
+      "language": "python",
+      "build_ok": true,
+      "tests_ok": true,
+      "seconds": 0.0414,
+      "error": null
+    },
+    {
+      "task_id": "003-luhn",
+      "language": "javascript",
+      "build_ok": true,
+      "tests_ok": true,
+      "seconds": 0.3213,
+      "error": null
+    },
+    {
+      "task_id": "004-anagram",
+      "language": "geno",
+      "build_ok": true,
+      "tests_ok": true,
+      "seconds": 0.6487,
+      "error": null
+    },
+    {
+      "task_id": "004-anagram",
+      "language": "python",
+      "build_ok": true,
+      "tests_ok": true,
+      "seconds": 0.0414,
+      "error": null
+    },
+    {
+      "task_id": "004-anagram",
+      "language": "javascript",
+      "build_ok": true,
+      "tests_ok": true,
+      "seconds": 0.3214,
+      "error": null
+    },
+    {
+      "task_id": "005-rle",
+      "language": "geno",
+      "build_ok": true,
+      "tests_ok": true,
+      "seconds": 0.7887,
+      "error": null
+    },
+    {
+      "task_id": "005-rle",
+      "language": "python",
+      "build_ok": true,
+      "tests_ok": true,
+      "seconds": 0.0402,
+      "error": null
+    },
+    {
+      "task_id": "005-rle",
+      "language": "javascript",
+      "build_ok": true,
+      "tests_ok": true,
+      "seconds": 0.3232,
+      "error": null
+    },
+    {
+      "task_id": "006-binary-search",
+      "language": "geno",
+      "build_ok": true,
+      "tests_ok": true,
+      "seconds": 0.6311,
+      "error": null
+    },
+    {
+      "task_id": "006-binary-search",
+      "language": "python",
+      "build_ok": true,
+      "tests_ok": true,
+      "seconds": 0.0405,
+      "error": null
+    },
+    {
+      "task_id": "006-binary-search",
+      "language": "javascript",
+      "build_ok": true,
+      "tests_ok": true,
+      "seconds": 0.3769,
+      "error": null
+    },
+    {
+      "task_id": "007-caesar",
+      "language": "geno",
+      "build_ok": true,
+      "tests_ok": true,
+      "seconds": 0.7631,
+      "error": null
+    },
+    {
+      "task_id": "007-caesar",
+      "language": "python",
+      "build_ok": true,
+      "tests_ok": true,
+      "seconds": 0.0384,
+      "error": null
+    },
+    {
+      "task_id": "007-caesar",
+      "language": "javascript",
+      "build_ok": true,
+      "tests_ok": true,
+      "seconds": 0.3345,
+      "error": null
+    },
+    {
+      "task_id": "008-levenshtein",
+      "language": "geno",
+      "build_ok": true,
+      "tests_ok": true,
+      "seconds": 0.7352,
+      "error": null
+    },
+    {
+      "task_id": "008-levenshtein",
+      "language": "python",
+      "build_ok": true,
+      "tests_ok": true,
+      "seconds": 0.04,
+      "error": null
+    },
+    {
+      "task_id": "008-levenshtein",
+      "language": "javascript",
+      "build_ok": true,
+      "tests_ok": true,
+      "seconds": 0.366,
+      "error": null
+    }
+  ]
+}

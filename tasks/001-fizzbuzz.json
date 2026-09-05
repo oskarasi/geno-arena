@@ -1,0 +1,14 @@
+{
+  "id": "001-fizzbuzz",
+  "title": "FizzBuzz",
+  "prompt": "Implement fizz_buzz(n) that returns a string for a positive integer n: \"FizzBuzz\" if n is divisible by both 3 and 5, \"Fizz\" if divisible by 3 only, \"Buzz\" if divisible by 5 only, otherwise the decimal representation of n. Also expose a range helper that returns the space-joined fizz_buzz values for 1..15 inclusive.",
+  "acceptance": [
+    "fizz_buzz(1) == \"1\"",
+    "fizz_buzz(3) == \"Fizz\"",
+    "fizz_buzz(5) == \"Buzz\"",
+    "fizz_buzz(15) == \"FizzBuzz\"",
+    "fizz_buzz(7) == \"7\"",
+    "fizz_buzz(30) == \"FizzBuzz\"",
+    "range 1..15 starts with \"1 2 Fizz 4 Buzz\" and contains \"FizzBuzz\" for 15"
+  ]
+}
