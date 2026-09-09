@@ -6,6 +6,8 @@ Adversarial LLM **coding arena**: the same language-agnostic task prompts implem
 **Repo:** https://github.com/oskarasi/geno-arena  
 **Geno:** [geno-lang](https://github.com/davidiach/geno-lang) **0.4.3**
 
+Related: the [geno-corpus](https://github.com/oskarasi/geno-corpus) vendors **100 mini-apps** that now meet the flagship bar (`run(args)`), plus `geno-ref-ledger` (101/101 harness).
+
 ## What this proves / does not prove
 
 **Proves (v0):**
